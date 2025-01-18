@@ -52,42 +52,43 @@ class App:
         diarization_params = self.default_params["diarization"]
         uvr_params = self.default_params["bgm_separation"]
 
-        with gr.Row():
-            dd_model = gr.Dropdown(choices=self.whisper_inf.available_models, value=whisper_params["model_size"],
-                                   label=_("Model"), allow_custom_value=True)
-            dd_lang = gr.Dropdown(choices=self.whisper_inf.available_langs + [AUTOMATIC_DETECTION],
-                                  value=AUTOMATIC_DETECTION if whisper_params["lang"] == AUTOMATIC_DETECTION.unwrap()
-                                  else whisper_params["lang"], label=_("Language"))
-            dd_file_format = gr.Dropdown(choices=["SRT", "WebVTT", "txt", "LRC", "transcription"], value=whisper_params["file_format"], label=_("File Format"))
-        with gr.Row():
-            cb_translate = gr.Checkbox(value=whisper_params["is_translate"], label=_("Translate to English?"),
-                                       interactive=True)
-        with gr.Row():
-            cb_timestamp = gr.Checkbox(value=whisper_params["add_timestamp"],
-                                       label=_("Add a timestamp to the end of the filename"),
-                                       interactive=True)
+        with gr.Accordion(_("Parameters"), open=False):
+            with gr.Row():
+                dd_model = gr.Dropdown(choices=self.whisper_inf.available_models, value=whisper_params["model_size"],
+                                       label=_("Model"), allow_custom_value=True)
+                dd_lang = gr.Dropdown(choices=self.whisper_inf.available_langs + [AUTOMATIC_DETECTION],
+                                      value=AUTOMATIC_DETECTION if whisper_params["lang"] == AUTOMATIC_DETECTION.unwrap()
+                                      else whisper_params["lang"], label=_("Language"))
+                dd_file_format = gr.Dropdown(choices=["SRT", "WebVTT", "txt", "LRC", "transcription"], value=whisper_params["file_format"], label=_("File Format"))
+            with gr.Row():
+                cb_translate = gr.Checkbox(value=whisper_params["is_translate"], label=_("Translate to English?"),
+                                           interactive=True)
+            with gr.Row():
+                cb_timestamp = gr.Checkbox(value=whisper_params["add_timestamp"],
+                                           label=_("Add a timestamp to the end of the filename"),
+                                           interactive=True)
 
-        with gr.Accordion(_("Advanced Parameters"), open=False):
-            whisper_inputs = WhisperParams.to_gradio_inputs(defaults=whisper_params, only_advanced=True,
-                                                            whisper_type=self.args.whisper_type,
-                                                            available_compute_types=self.whisper_inf.available_compute_types,
-                                                            compute_type=self.whisper_inf.current_compute_type)
+            with gr.Accordion(_("Advanced Parameters"), open=False):
+                whisper_inputs = WhisperParams.to_gradio_inputs(defaults=whisper_params, only_advanced=True,
+                                                                whisper_type=self.args.whisper_type,
+                                                                available_compute_types=self.whisper_inf.available_compute_types,
+                                                                compute_type=self.whisper_inf.current_compute_type)
 
-        with gr.Accordion(_("Background Music Remover Filter"), open=False):
-            uvr_inputs = BGMSeparationParams.to_gradio_input(defaults=uvr_params,
-                                                             available_models=self.whisper_inf.music_separator.available_models,
-                                                             available_devices=self.whisper_inf.music_separator.available_devices,
-                                                             device=self.whisper_inf.music_separator.device)
+            with gr.Accordion(_("Background Music Remover Filter"), open=False):
+                uvr_inputs = BGMSeparationParams.to_gradio_input(defaults=uvr_params,
+                                                                 available_models=self.whisper_inf.music_separator.available_models,
+                                                                 available_devices=self.whisper_inf.music_separator.available_devices,
+                                                                 device=self.whisper_inf.music_separator.device)
 
-        with gr.Accordion(_("Voice Detection Filter"), open=False):
-            vad_inputs = VadParams.to_gradio_inputs(defaults=vad_params)
+            with gr.Accordion(_("Voice Detection Filter"), open=False):
+                vad_inputs = VadParams.to_gradio_inputs(defaults=vad_params)
 
-        with gr.Accordion(_("Diarization"), open=False):
-            diarization_inputs = DiarizationParams.to_gradio_inputs(defaults=diarization_params,
-                                                                    available_devices=self.whisper_inf.diarizer.available_device,
-                                                                    device=self.whisper_inf.diarizer.device)
+            with gr.Accordion(_("Diarization"), open=False):
+                diarization_inputs = DiarizationParams.to_gradio_inputs(defaults=diarization_params,
+                                                                        available_devices=self.whisper_inf.diarizer.available_device,
+                                                                        device=self.whisper_inf.diarizer.device)
 
-        pipeline_inputs = [dd_model, dd_lang, cb_translate] + whisper_inputs + vad_inputs + diarization_inputs + uvr_inputs
+            pipeline_inputs = [dd_model, dd_lang, cb_translate] + whisper_inputs + vad_inputs + diarization_inputs + uvr_inputs
 
         return (
             pipeline_inputs,
