@@ -118,6 +118,45 @@ class WriteTXT(ResultWriter):
             ))
         return segments
 
+class WriteTXTtranscription(ResultWriter):
+    extension: str = "txt"
+    always_include_hours: bool = False
+    decimal_marker: str = "."
+
+    def write_result(
+        self, result: Union[Dict, List[Segment]], file: TextIO, options: Optional[dict] = None, **kwargs
+    ):
+        text = ""
+        speaker = ""
+        for segment in result["segments"]:
+            if segment["text"].startswith("SPEAKER_"):
+                delim_pos = segment["text"].find("|")
+                speaker_cur = segment["text"][0:delim_pos]
+                if speaker_cur != speaker:
+                    speaker = speaker_cur
+                    text+= "\n\n" + speaker_cur + " (ab " + format_timestamp(segment["start"], True, ".") + ")\n"
+                text += segment["text"][delim_pos+1:].strip() + " "
+            else:
+                text += segment["text"].strip().replace("None|", "") + " "
+        print(text, file=file, flush=True)
+
+
+    def to_segments(self, file_path: str):
+        segments = []
+
+        blocks = read_file(file_path).split('\n')
+
+        for block in blocks:
+            if block.startswith("SPEAKER_") or block.strip() == "":
+                continue
+
+            segments.append(Segment(
+                start=None,
+                end=None,
+                text=block
+            ))
+        return segments
+
 
 class SubtitlesWriter(ResultWriter):
     always_include_hours: bool
@@ -403,7 +442,8 @@ def get_writer(
         "srt": WriteSRT,
         "tsv": WriteTSV,
         "json": WriteJSON,
-        "lrc": WriteLRC
+        "lrc": WriteLRC,
+        "transcription": WriteTXTtranscription
     }
 
     if output_format == "all":
@@ -436,6 +476,9 @@ def generate_file(
 
     if isinstance(file_writer, WriteLRC) and kwargs.get("highlight_words", False):
         kwargs["highlight_words"], kwargs["align_lrc_words"] = False, True
+
+    if isinstance(file_writer, WriteTXTtranscription):
+        file_path = os.path.join(output_dir, f"{output_file_name}.txt")
 
     file_writer(result=result, output_file_name=output_file_name, **kwargs)
     content = read_file(file_path)
