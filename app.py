@@ -52,7 +52,7 @@ class App:
         diarization_params = self.default_params["diarization"]
         uvr_params = self.default_params["bgm_separation"]
 
-        with gr.Accordion(_("Parameters"), open=False):
+        with gr.Accordion(_("Settings"), open=False):
             with gr.Row():
                 dd_model = gr.Dropdown(choices=self.whisper_inf.available_models, value=whisper_params["model_size"],
                                        label=_("Model"), allow_custom_value=True)
@@ -95,6 +95,27 @@ class App:
             dd_file_format,
             cb_timestamp
         )
+
+    def download_file(self, file):
+        return file
+
+    def delete_files(self, file):
+        for f in file:
+            if os.path.isfile(f):
+                print ("deleting: " + f)
+                os.remove(f)
+            else:
+                print("folders can not be deleted: " + f)
+
+    # those methods are for a workaround to update the Gradio FileExplorer, since there is no official way to refresh
+    # the content of the FileExplorer
+    def file_explorer_invisible(self):
+        return gr.FileExplorer(root_dir=".", visible=False)
+    def file_explorer_single(self):
+        return gr.FileExplorer(root_dir=self.args.output_dir, file_count="single", show_label=False, visible=True)
+    def file_explorer_multiple(self):
+        return gr.FileExplorer(root_dir=self.args.output_dir, file_count="multiple", show_label=False, visible=True)
+
 
     def launch(self):
         translation_params = self.default_params["translation"]
@@ -303,6 +324,44 @@ class App:
                                                      fn=lambda: self.open_folder(os.path.join(
                                                          self.args.output_dir, "UVR", "vocals"
                                                      )))
+
+                    with gr.TabItem(_("Output files")):  # tab6
+                        delete_btn = None
+                        refresh_btn_dl = None
+                        refresh_btn_del = None
+                        file_explorer_dl = None
+                        file_explorer_del = None
+                        with gr.TabItem(_("Download")):
+                            with gr.Row():
+                                refresh_btn_dl = gr.DownloadButton(label=_("Refresh"), scale=1)
+                                download_btn = gr.DownloadButton(label=_("Download"), scale=5, variant="primary")
+                            file_explorer_dl = self.file_explorer_single()
+                            file_explorer_dl.change(fn=self.download_file, inputs=file_explorer_dl, outputs=download_btn)
+                        with gr.TabItem(_("Delete")):
+                            with gr.Row():
+                                refresh_btn_del = gr.DownloadButton(label=_("Refresh"), scale=5)
+                                delete_btn = gr.Button(value=_("Delete"), scale=1, variant="stop")
+                            file_explorer_del = self.file_explorer_multiple()
+
+                        # Calling all those methods is a workaround to update the Gradio FileExplorer, since there is no
+                        # official way to refresh the content of the FileExplorer
+                        delete_btn.click(
+                            fn=self.delete_files, inputs=file_explorer_del).then(
+                            fn=self.file_explorer_invisible, outputs=file_explorer_del).then(
+                            fn=self.file_explorer_multiple,  outputs=file_explorer_del).then(
+                            fn=self.file_explorer_invisible, outputs=file_explorer_dl).then(
+                            fn=self.file_explorer_single,    outputs=file_explorer_dl)
+                        refresh_btn_dl.click(
+                            fn=self.file_explorer_invisible, outputs=file_explorer_dl).then(
+                            fn=self.file_explorer_single,    outputs=file_explorer_dl).then(
+                            fn=self.file_explorer_invisible, outputs=file_explorer_del).then(
+                            fn=self.file_explorer_multiple,  outputs=file_explorer_del)
+                        refresh_btn_del.click(
+                            fn=self.file_explorer_invisible, outputs=file_explorer_del).then(
+                            fn=self.file_explorer_multiple,  outputs=file_explorer_del).then(
+                            fn=self.file_explorer_invisible, outputs=file_explorer_dl).then(
+                            fn=self.file_explorer_single,    outputs=file_explorer_dl)
+
 
         # Launch the app with optional gradio settings
         args = self.args

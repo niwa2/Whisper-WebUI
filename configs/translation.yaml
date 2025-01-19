@@ -43,6 +43,11 @@ en: # English
   Instrumental: Instrumental
   Vocals: Vocals
   SEPARATE BACKGROUND MUSIC: SEPARATE BACKGROUND MUSIC
+  Settings: Settings
+  Output files: Output files
+  Download: Download
+  Delete: Delete
+  Refresh: Refresh
 
 ko: # Korean
   Language: 언어
@@ -89,6 +94,11 @@ ko: # Korean
   Instrumental: 악기
   Vocals: 보컬
   SEPARATE BACKGROUND MUSIC: 배경 음악 분리
+  Settings: 설정
+  Output files: 출력 파일
+  Download: 다운로드
+  Delete: 삭제
+  Refresh: 새로 고치다
 
 ja: # Japanese
   Language: 言語
@@ -135,6 +145,11 @@ ja: # Japanese
   Instrumental: Instrumental
   Vocals: Vocals
   SEPARATE BACKGROUND MUSIC: SEPARATE BACKGROUND MUSIC
+  Settings: Setting
+  Output files: Output files
+  Download: Download
+  Delete: Delete
+  Refresh: Refresh
 
 es: # Spanish
   Language: Idioma
@@ -181,6 +196,11 @@ es: # Spanish
   Instrumental: Instrumental
   Vocals: Vocals
   SEPARATE BACKGROUND MUSIC: SEPARATE BACKGROUND MUSIC
+  Settings: Settings
+  Output files: Output files
+  Download: Download
+  Delete: Delete
+  Refresh: Refresh
 
 fr: # French
   Language: Langue
@@ -227,6 +247,11 @@ fr: # French
   Instrumental: Instrumental
   Vocals: Voix
   SEPARATE BACKGROUND MUSIC: SÉPARER LA MUSIQUE DE FOND
+  Settings: paramètres
+  Output files: Fichiers de sortie
+  Download: Télécharger
+  Delete: Supprimer
+  Refresh: Rafraîchir
 
 de: # Deutsch
   Language: Sprache
@@ -273,6 +298,11 @@ de: # Deutsch
   Instrumental: Instrumental
   Vocals: Gesang
   SEPARATE BACKGROUND MUSIC: HINTERGRUNDMUSIK TRENNEN
+  Settings: Einstellungen
+  Output files: Ausgabedateien
+  Download: Herunterladen
+  Delete: Löschen
+  Refresh: Aktualisieren
 
 
 zh: # Chinese
@@ -320,6 +350,11 @@ zh: # Chinese
   Instrumental: 器乐声
   Vocals: 人声
   SEPARATE BACKGROUND MUSIC: 分离背景音乐与人声
+  Settings: 设置
+  Output files: 输出文件
+  Download: 下载
+  Delete: 删除
+  Refresh: 刷新
 
 uk: # Ukrainian
   Language: Мова
@@ -366,6 +401,11 @@ uk: # Ukrainian
   Instrumental: Інструментал
   Vocals: Вокал
   SEPARATE BACKGROUND MUSIC: РОЗДІЛИТИ ФОНОВУ МУЗИКУ
+  Settings: налаштування
+  Output files: Вихідні файли
+  Download: Завантажити
+  Delete: Видалити
+  Refresh: Оновити
 
 ru: # Russian
   Language: Язык
@@ -412,6 +452,11 @@ ru: # Russian
   Instrumental: Инструментал
   Vocals: Вокал
   SEPARATE BACKGROUND MUSIC: РАЗДЕЛИТЬ ФОНОВУЮ МУЗЫКУ
+  Settings: настройки
+  Output files: Выходные файлы
+  Download: Скачать
+  Delete: Удалить
+  Refresh: Обновить
 
 tr: # Turkish
   Language: Dil
@@ -458,6 +503,11 @@ tr: # Turkish
   Instrumental: Enstrümantal
   Vocals: Vokal
   SEPARATE BACKGROUND MUSIC: ARKA PLAN MÜZİĞİNİ AYIR
+  Settings: ayarlar
+  Output files: Çıkış dosyaları
+  Download: İndirmek
+  Delete: Silmek
+  Refresh: Yenile
 
 eu: # Basque
   Language: Hizkuntza
@@ -504,3 +554,8 @@ eu: # Basque
   Instrumental: Instrumentala
   Vocals: Ahotsak
   SEPARATE BACKGROUND MUSIC: BEREIZI ATZEKO MUSIKA
+  Settings: ezarpenak
+  Output files: Irteera fitxategiak
+  Download: Deskargatu
+  Delete: Ezabatu
+  Refresh: Freskatu
