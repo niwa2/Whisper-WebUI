@@ -128,16 +128,35 @@ class WriteTXTtranscription(ResultWriter):
     ):
         text = ""
         speaker = ""
+        last_end = 0.0
+        last_segment_text = ""
         for segment in result["segments"]:
+            cur_segment_text = ""
             if segment["text"].startswith("SPEAKER_"):
                 delim_pos = segment["text"].find("|")
-                speaker_cur = segment["text"][0:delim_pos]
-                if speaker_cur != speaker:
-                    speaker = speaker_cur
-                    text+= "\n\n" + speaker_cur + " (ab " + format_timestamp(segment["start"], True, ".") + ")\n"
-                text += segment["text"][delim_pos+1:].strip() + " "
+                cur_segment_text = segment["text"][delim_pos+1:].strip()
+                if "" != cur_segment_text:
+                    speaker_cur = segment["text"][0:delim_pos]
+                    if speaker_cur != speaker:
+                        speaker = speaker_cur
+                        text+= "\n\n" + speaker_cur + " (ab " + format_timestamp(segment["start"], True, ".") + ")\n"
             else:
-                text += segment["text"].strip().replace("None|", "") + " "
+                cur_segment_text = segment["text"].replace("None|", "").strip()
+
+            ## possible Halluzination --> new line to make it more apparent
+            if cur_segment_text == last_segment_text:
+                text += "\n"
+
+            text += cur_segment_text + " "
+
+            # pause --> new line
+            # not working reliably
+            # if (2.0 < (segment["start"] - last_end)):
+            #     text = text.rstrip() + "\n"
+
+            last_end = segment["end"]
+            last_segment_text = cur_segment_text
+
         print(text, file=file, flush=True)
 
 
