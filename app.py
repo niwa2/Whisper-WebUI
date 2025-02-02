@@ -20,7 +20,7 @@ from modules.whisper.data_classes import *
 class App:
     def __init__(self, args):
         self.args = args
-        self.app = gr.Blocks(css=CSS, theme=self.args.theme, delete_cache=(60, 3600))
+        self.app = gr.Blocks(css=CSS, theme=self.args.theme, delete_cache=(60*60, 3600*24*7))
         self.whisper_inf = WhisperFactory.create_whisper_inference(
             whisper_type=self.args.whisper_type,
             whisper_model_dir=self.args.whisper_model_dir,
